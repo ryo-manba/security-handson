@@ -14,8 +14,8 @@
       const urlStr = url.searchParams.get("url");
       if (urlStr !== null) {
         const linkUrl = new URL(urlStr, url.origin);
-      // XSS脆弱性があるコード
-      //   document.querySelector("#link").href = linkUrl;
+        // XSS脆弱性があるコード
+        // document.querySelector("#link").href = linkUrl;
         if (linkUrl.protocol === "http:" || linkUrl.protocol === "https:") {
           document.querySelector("#link").href = linkUrl;
         } else {
@@ -24,8 +24,8 @@
       }
       const message = url.searchParams.get("message");
       if (message !== null) {
-        const textNode = document.createTextNode(message);
-        document.querySelector("#result").appendChild(textNode);
+        const sanitizeMessage = DOMPurify.sanitieze(message);
+        document.querySelector("#result").innerHTML = sanitizedMessage;
 
         // XSS脆弱性があるコード
         // document.querySelector("#result").innerHTML = message;
