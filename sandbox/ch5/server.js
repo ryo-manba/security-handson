@@ -1,8 +1,12 @@
 const express = require("express");
 const api = require("./routes/api");
 
+const crypto = require("crypto");
+
 const app = express();
 const port = 3000;
+
+app.set("view engine", "ejs");
 
 app.use(express.static("public"));
 app.use("/api", api);
@@ -10,6 +14,14 @@ app.use("/api", api);
 app.get("/", (req, res, next) => {
   res.end("Top Page");
 })
+
+app.get("/csp", (req, res, next) => {
+  const nonceValue = crypto.randomBytes(16).toString("base64");
+
+  res.header("Content-Security-Policy", `script-src 'nonce-${nonceValue}'`);
+
+  res.render("csp", { nonce: nonceValue });
+});
 
 // サーバを起動する
 app.listen(port, () => {
