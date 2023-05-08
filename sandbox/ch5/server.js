@@ -21,7 +21,8 @@ app.get("/csp", (req, res, next) => {
   res.header("Content-Security-Policy",
               `script-src 'nonce-${nonceValue}' 'strict-dynamic';` +
               "object-src 'none';" +
-              "base-uri 'none';"
+              "base-uri 'none';" +
+              "require-trusted-types-for 'script';"
   );
 
   res.render("csp", { nonce: nonceValue });
