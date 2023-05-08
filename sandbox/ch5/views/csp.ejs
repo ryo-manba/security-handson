@@ -5,7 +5,12 @@
   </head>
   <body>
     <script nonce="<%= nonce %>">
-      alert('Hello, CSP!');
+      // alert('Hello, CSP!');
+
+      // 動的にスクリプトを生成する
+      const script = document.createElement("script");
+      script.src = "./csp-test.js";
+      document.body.appendChild(script);
     </script>
   </body>
 </html>
