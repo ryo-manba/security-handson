@@ -5,13 +5,22 @@ const https = require("https");
 const fs = require("fs");
 const crypto = require("crypto");
 const app = express();
-const port = 3000;
+const port = 80;
 
 app.set("view engine", "ejs");
+
+app.use((req, res, next) => {
+  if (req.secure) {
+    next();
+  } else {
+    res.redirect(`https://${req.hostname}`);
+  }
+})
 
 app.use(express.static("public", {
   setHeaders: (res, path, stat) => {
     res.header("X-Frame-Options", "DENY");
+    res.header("Strict-Transport-Security", "max-age=60");
   }
 }));
 
