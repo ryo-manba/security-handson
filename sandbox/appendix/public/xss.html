@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>XSS検証用ページ</title>
+    <script src="./purify.js"></script>
+  </head>
+  <body>
+    <h1>XSS検証用ページ</h1>
+    <div id="result"></div>
+    <a id="link" href="#">リンクをクリック</a>
+
+    <script>
+      const url = new URL(location.href);
+      const urlStr = url.searchParams.get("url");
+      if (urlStr !== null) {
+        const linkUrl = new URL(urlStr, url.origin);
+        // XSS脆弱性があるコード
+        // document.querySelector("#link").href = linkUrl;
+        if (linkUrl.protocol === "http:" || linkUrl.protocol === "https:") {
+          document.querySelector("#link").href = linkUrl;
+        } else {
+          console.warn("httpまたはhttps以外のURLが指定されています。");
+        }
+      }
+      const message = url.searchParams.get("message");
+      if (message !== null) {
+        const sanitizeMessage = DOMPurify.sanitieze(message);
+        document.querySelector("#result").innerHTML = sanitizedMessage;
+
+        // XSS脆弱性があるコード
+        // document.querySelector("#result").innerHTML = message;
+      }
+    </script>
+  </body>
+</html>
+
